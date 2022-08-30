@@ -1,0 +1,19 @@
+{% extends "console/base.html" %}
+
+{% block page %}
+  <div class="container pt-5">
+    <div class="row d-flex justify-content-center">
+      <div class="col-md-6">
+        <div class="card text-center">
+          <div class="card-header p-4">
+            <h5 class="mb-0"><strong>e-mail 인증</strong></h5>
+          </div>
+          <div class="card-body p-4">
+            <p>정상적인 서비스 이용을 위해서는 e-mail 인증이 필요합니다.</p>
+            <p>{{ user.email }}으로 발송된 링크를 확인 후 인증해주세요.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock page %}

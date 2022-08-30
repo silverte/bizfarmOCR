@@ -1,0 +1,121 @@
+{% extends 'console/base_nav.html' %}
+{% load static %}
+{% load widget_tweaks %}
+
+{#{% block title %}{% endblock title %}#}
+
+{% block page %}
+  <div class="container">
+    <p class="h4 text-start pt-3 mb-0">Demo</p>
+    <p class="text-black-50 mt-0"><small>Document OCR 테스트를 위한 화면입니다</small></p>
+    <section class="mb-4">
+      <div class="row">
+        <div class="col-md-6 mb-4">
+          <div class="card h-100">
+            <form method="post" enctype="multipart/form-data" autocomplete="off">
+              {% csrf_token %}
+              <div class="card-header">
+                <div class="row">
+                  <div class="col-6">
+                    <strong>테스트 데이터</strong>
+                  </div>
+                  <div class="col-6 text-end">
+                    <button id="upload_btn" type="submit" class="btn btn-primary btn-sm py-1 disabled">Upload</button>
+                  </div>
+                </div>
+              </div>
+              <div class="card-body">
+                <div id="dnd-custom-height" class="file-upload-wrapper shadow-2">
+                  <input id="file-upload"
+                    type="file"
+                    name="demo_file"
+                    class="file-upload-input rounded-circle"
+                    data-mdb-height="520"
+                    data-mdb-file-upload="file-upload"
+                    data-mdb-default-file="{{ uploaded_file_url }}"
+                    data-mdb-accepted-extensions="image/*"
+                  />
+                  <script type="text/javascript">
+                      const fileUpload = document.getElementById('file-upload');
+                      fileUpload.addEventListener('fileAdd.mdb.fileUpload', (e) => {
+                          const addedFile = e.files;
+                          console.log(addedFile)
+                          <!-- 이미지 선택시 업로드 버튼 활성화 -->
+                          document.getElementById('upload_btn').classList.remove("disabled")
+                          <!-- 이미지 선택시 테스트결과 text 탭 내용 삭제 -->
+                          const tab1_contents = document.getElementById('tab1-text')
+                          tab1_contents.parentNode.removeChild(tab1_contents)
+                          <!-- 이미지 선택시 테스트결과 text 탭 내용 삭제 -->
+                          const tab2_contents = document.getElementById('tab1-json')
+                          tab1_contents.parentNode.removeChild(tab2_contents)
+                      });
+                      const send = document.getElementById('upload_btn');
+                      send.addEventListener("click", function () {
+                          <!--버튼 클릭시 비활성화 -->
+                          document.getElementById('upload_btn').classList.add("disabled")
+                      });
+                  </script>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+        <div class="col-md-6 mb-4">
+          <div class="card mb-4 h-100">
+            <div class="card-header">
+              <p class="mb-0"><strong>테스트 결과</strong></p>
+            </div>
+            <div class="card-body ">
+              <!-- Tabs navs -->
+              <ul class="nav nav-tabs mb-3" id="ex1" role="tablist">
+                <li class="nav-item" role="presentation">
+                  <a
+                    class="nav-link active"
+                    id="ex1-tab-1"
+                    data-mdb-toggle="tab"
+                    href="#ex1-tabs-1"
+                    role="tab"
+                    aria-controls="ex1-tabs-1"
+                    aria-selected="true"
+                  >Text</a
+                  >
+                </li>
+                <li class="nav-item" role="presentation">
+                  <a
+                    class="nav-link"
+                    id="ex1-tab-2"
+                    data-mdb-toggle="tab"
+                    href="#ex1-tabs-2"
+                    role="tab"
+                    aria-controls="ex1-tabs-2"
+                    aria-selected="false"
+                  >JSON</a
+                  >
+                </li>
+              </ul>
+              <!-- Tabs navs -->
+
+              <!-- Tabs content -->
+              <div class="tab-content" id="ex1-content">
+                <div
+                        class="tab-pane fade show active"
+                        id="ex1-tabs-1"
+                        role="tabpanel"
+                        aria-labelledby="ex1-tab-1"
+                >
+                  <p id="tab1-text" class="text-start"><small>{{ text_result }}</small></p>
+                </div>
+                <div class="tab-pane fade" id="ex1-tabs-2" role="tabpanel" aria-labelledby="ex1-tab-2">
+                  <p id="tab1-json" class="text-start"><small>{{ json_result }}</small></p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+{% endblock page %}
+
+{% block local_js %}
+{% endblock local_js %}

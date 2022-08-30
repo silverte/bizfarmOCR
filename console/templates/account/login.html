@@ -1,0 +1,93 @@
+{% extends "console/base_nav.html" %}#}
+{% load static %}
+{% load widget_tweaks %}
+
+{#{% block title %}로그인 | CheckMate{% endblock title %}#}
+
+{% block page %}
+    <div class="container pt-5">
+        <div class="row d-flex justify-content-center">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body p-4">
+                        <div class="tab-content">
+                            <div class="tab-pane fade show active" id="pills-login" role="tabpanel" aria-labelledby="tab-login">
+                                <form method="post">
+                                    {% csrf_token %}
+                                    <div class="text-center mb-4">
+                                        <button type="button" class="btn btn-primary btn-floating mx-1">
+                                            <i class="fab fa-facebook-f"></i>
+                                        </button>
+
+                                        <button type="button" class="btn btn-primary btn-floating mx-1">
+                                            <i class="fab fa-google"></i>
+                                        </button>
+
+                                        <button type="button" class="btn btn-primary btn-floating mx-1">
+                                            <i class="fab fa-twitter"></i>
+                                        </button>
+
+                                        <button type="button" class="btn btn-primary btn-floating mx-1">
+                                            <i class="fab fa-github"></i>
+                                        </button>
+                                    </div>
+
+
+                                    {%  for error in form.non_field_errors %}
+                                        <div class="form-error error-message text-danger mb-3 text-center" >{{ error }}</div>
+                                    {% endfor %}
+
+                                    <!-- Email input -->
+                                    <div class="form-outline mb-4 mt-4">
+                                        {{ form.login|add_class:'form-control'|attr:'placeholder:'|add_error_class:'error' }}
+                                        {%  for error in form.login.errors %}
+                                            <div class="form-error error-message">{{ error }}</div>
+                                        {% endfor %}
+                                        <label class="form-label" for="id_login">Email</label>
+                                    </div>
+
+                                    <!-- Password input -->
+                                    <div class="form-outline mb-4">
+                                        {{ form.password|add_class:'form-control'|attr:'placeholder:'|add_error_class:'error' }}
+                                        {%  for error in form.password.errors %}
+                                            <div class="form-error error-message">{{ error }}</div>
+                                        {% endfor %}
+                                        <label class="form-label" for="id_password">Password</label>
+                                    </div>
+
+                                    <!-- 2 column grid layout -->
+                                    <div class="row mb-4">
+                                        <div class="col-md-6 d-flex justify-content-center">
+                                            <!-- Checkbox -->
+                                            <div class="form-check mb-3 mb-md-0">
+                                                <input class="form-check-input" type="checkbox" value="" id="loginCheck" checked />
+                                                <label class="form-check-label" for="loginCheck">
+                                                    로그인 상태 유지
+                                                </label>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-6 d-flex justify-content-center">
+                                            <!-- Simple link -->
+                                            <a href="{% url 'account_reset_password' %}">비밀번호 초기화</a>
+                                        </div>
+                                    </div>
+
+                                    <!-- Submit button -->
+                                    <button type="submit" class="btn btn-primary btn-block mb-4">
+                                        로그인
+                                    </button>
+
+                                    <!-- Register buttons -->
+                                    <div class="text-center">
+                                        <p><a href="{% url 'account_signup' %}">회원가입</a></p>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock page %}

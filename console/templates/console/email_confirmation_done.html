@@ -1,0 +1,26 @@
+{% extends 'console/base.html' %}
+{% block title %}{% endblock title %}
+
+{% block page %}
+  <div class="container pt-5">
+    <div class="row d-flex justify-content-center">
+      <div class="col-md-6">
+        <div class="card text-center">
+          <div class="card-header p-4">
+            <h5 class="mb-0"><strong>e-mail 인증</strong></h5>
+          </div>
+          <div class="card-body p-4">
+            <p>e-mail 인증이 완료되었습니다.</p>
+          </div>
+          <div class="d-flex justify-content-center align-items-center mb-2">
+            {% if user.is_authenticated %}
+              <a href="{% url 'index' %}">Home</a>
+            {% else %}
+              <a href="{% url 'account_login' %}">로그인</a>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock page %}

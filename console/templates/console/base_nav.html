@@ -1,0 +1,149 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+  <meta http-equiv="x-ua-compatible" content="ie=edge" />
+  <title>{%  block title %}console - CheckMate{% endblock title %}</title>
+  <!-- MDB icon -->
+  {#    <link rel="icon" href="{% static 'console/img/mdb-favicon.ico' %}'" type="image/x-icon" />#}
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
+        integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <!-- Google Fonts Roboto -->
+  <link
+          rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap"
+  />
+  <!-- MDB ESSENTIAL -->
+  <link rel="stylesheet" href="{% static 'console/css/mdb.min.css' %}" />
+  <!-- MDB PLUGINS -->
+  <link rel="stylesheet" href="{% static 'console/plugins/css/all.min.css' %}" />
+  <!-- Custom styles -->
+  <link rel="stylesheet" href="{% static 'console/css/style.css' %}">
+</head>
+
+<body>
+<!--Main Navigation-->
+<header>
+  <!-- Sidenav -->
+  <nav id="sidenav-1" class="sidenav" data-mdb-hidden="false" data-mdb-accordion="false">
+    <a class="ripple d-flex justify-content-center " href="{% url 'index' %}" data-mdb-ripple-color="primary">
+      <img id="dummy-logo" width="180" src="{% static 'console/img/dummy-logo.png' %}"
+           alt="dummy-logo" draggable="false" />
+    </a>
+
+    <ul class="sidenav-menu">
+      <li class="sidenav-item">
+        <a class="sidenav-link" href="{% url 'dashboard' %}">
+          <i class="fas fa-chart-area fa-fw me-2"></i
+          ><span>Dashboard</span></a
+        >
+      </li>
+      <li class="sidenav-item">
+        <a class="sidenav-link">
+          <i class="fas fa-file-alt fa-fw me-2"></i><span>Biz OCR</span></a>
+        <ul class="sidenav-collapse show" >
+          <li class="sidenav-item">
+            <a class="sidenav-link" href="{% url 'domain-list' %}">Domain</a>
+          </li>
+          <li class="sidenav-item">
+            <a class="sidenav-link" href="{% url 'ocr-demo' %}">Demo</a>
+          </li>
+        </ul>
+      </li>
+      <li class="sidenav-item">
+        <a class="sidenav-link">
+          <i class="fas fa-spell-check me-2"></i>
+{#          <i class="fas fa-search fa-fw "></i>#}
+          <span>Review</span></a>
+        <ul class="sidenav-collapse show" >
+          <li class="sidenav-item">
+            <a class="sidenav-link" href="{% url 'rule' %}">Rule Registration</a>
+          </li>
+          <li class="sidenav-item">
+            <a class="sidenav-link" href="{% url 'review' %}">Document Review</a>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </nav>
+  <!-- Navbar -->
+  <nav id="main-navbar" class="navbar navbar-expand-lg navbar-light bg-white fixed-top">
+    <!-- Container wrapper -->
+    <div class="container-fluid">
+      <!-- Toggler -->
+      <button data-mdb-toggle="sidenav" data-mdb-target="#sidenav-1" class="btn shadow-0 p-0 me-3 d-block d-xxl-none"
+              aria-controls="#sidenav-1" aria-haspopup="true">
+        <i class="fas fa-bars fa-lg"></i>
+      </button>
+      <!-- Right links -->
+      <ul class="navbar-nav ms-auto d-flex flex-row">
+        <!-- Notification dropdown -->
+        <li class="nav-item dropdown">
+          <a class="nav-link me-3 me-lg-0 dropdown-toggle hidden-arrow" href="#" id="navbarDropdownMenuLink"
+             role="button" data-mdb-toggle="dropdown" aria-expanded="false">
+            <i class="fas fa-bell"></i>
+            <span class="badge rounded-pill badge-notification bg-danger">1</span>
+          </a>
+          <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownMenuLink">
+            <li><a class="dropdown-item" href="#">Some news</a></li>
+            {#                        <li><a class="dropdown-item" href="#">Another news</a></li>#}
+            {#                        <li>#}
+            {#                            <a class="dropdown-item" href="#">Something else here</a>#}
+            </li>
+          </ul>
+        </li>
+        <!-- Icon -->
+        <li class="nav-item">
+          <a class="nav-link me-3 me-lg-0" href="#">
+            <i class="fas fa-fill-drip"></i>
+          </a>
+        </li>
+        <!-- Avatar -->
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle hidden-arrow d-flex align-items-center" href="#"
+             id="navbarDropdownMenuLink" role="button" data-mdb-toggle="dropdown" aria-expanded="false">
+            {% if user.is_authenticated %}
+              <img src="{{ user.profile_pic.url }}" class="rounded-circle" height="22"
+                     alt="" loading="lazy" />
+            {% else %}
+              <img src="/uploads/default_profile_pic.jpg" class="rounded-circle" height="22"
+                     alt="" loading="lazy" />
+            {% endif %}
+          </a>
+          <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownMenuLink">
+            <li><a class="dropdown-item" href="{% url 'profile' %}">My profile</a></li>
+            <li><a class="dropdown-item" href="{% url 'account_change_password' %}">Password</a></li>
+            <li><a class="dropdown-item" href="{% url 'account_logout' %}">Logout</a></li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+    <!-- Container wrapper -->
+  </nav>
+  <!-- Navbar -->
+</header>
+<!-- Sidenav -->
+<main style="margin-top: 58px">
+  <div class="container">
+    {% block page %}
+    {% endblock page %}
+  </div>
+</main>
+
+<!--Footer-->
+<footer></footer>
+<!--Footer-->
+<!-- MDB ESSENTIAL -->
+<script type="text/javascript" src="{% static 'console/js/mdb.min.js' %}"></script>
+<!-- MDB PLUGINS -->
+<script type="text/javascript" src="{% static 'console/plugins/js/all.min.js' %}"></script>
+<!-- Custom scripts -->
+<script type="text/javascript" src="{% static 'console/js/script.js' %}"></script>
+{%  block local_js %} {% endblock local_js %}
+</body>
+</html>

@@ -1,0 +1,241 @@
+{% extends 'console/base_nav.html' %}
+{% load static %}
+{% load widget_tweaks %}
+
+{#{% block title %}{% endblock title %}#}
+
+{% block page %}
+  <div class="container">
+    <p class="h4 text-start pt-3 mb-0">Domain</p>
+    <p class="text-black-50 mt-0"><small>도메인 기본 정보와 목록을 관리합니다</small></p>
+    <section class="mb-4">
+      <div class="card mb-4">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-6">
+              <div class="d-grid gap-2 d-md-block">
+                <button class="btn btn-primary btn-sm me-1" data-mdb-toggle="modal" data-mdb-target="#createDomain">
+                  도메인 생성
+                </button>
+                <!-- Modal -->
+                <div class="modal fade" id="createDomain" tabindex="-1" aria-labelledby="createDomainLabel" aria-hidden="true">
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                      <form method="post">
+                        {% csrf_token %}
+                        <div class="modal-header">
+                          <h1 class="h6 modal-title" id="createDomainLabel">도메인 생성</h1>
+                          <button type="button" class="btn-close" data-mdb-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                          <div class="form-outline">
+                            {{ form.domain_name|add_class:'form-control'|add_error_class:'error' }}
+                            <label class="form-label" for="domain_name"><small>도메인명</small></label>
+                          </div>
+                          {% for error in form.domain_name.errors %}
+                            <div class="error-message"><small>{{ error }}</small></div>
+                          {% endfor %}
+                          <div class="form-outline mt-4">
+                            {{ form.domain_code|add_class:'form-control'|attr:'placeholder:'|add_error_class:'error' }}
+                            <label class="form-label" for="registerDomainCode"><small>도메인코드</small></label>
+                          </div>
+                          {%  for error in form.domain_code.errors %}
+                            <div class="error-message"><small>{{ error }}</small></div>
+                          {% endfor %}
+                          <div class="form-outline mt-4">
+                            <div class=" row">
+                              <div class="col-4 ps-4">
+                                <small>OCR유형</small>
+                              </div>
+                              <div class="col-8">
+                                {%  for radio in form.ocr_type %}
+                                  {{ radio }}
+                                {%  endfor %}
+                              </div>
+                            </div>
+                            {% for error in form.ocr_type.errors %}
+                              <div class="error-message">{{ error }}</div>
+                            {% endfor %}
+                          </div>
+                          <div class="form-outline mt-4">
+                            <div class=" row">
+                              <div class="col-4 ps-4">
+                                <small>서비스플랜</small>
+                              </div>
+                              <div class="col-8">
+                                {%  for radio in form.price_plan %}
+                                  {{ radio }}
+                                {%  endfor %}
+                              </div>
+                            </div>
+                            {% for error in form.price_plan.errors %}
+                              <div class="error-message">{{ error }}</div>
+                            {% endfor %}
+                          </div>
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary btn-sm" data-mdb-dismiss="modal">닫기</button>
+                          <button type="submit" class="btn btn-primary btn-sm">도메인 생성</button>
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+                <button id="domain-delete" class="btn btn-primary btn-sm disabled" data-mdb-toggle="modal" data-mdb-target="#deleteDomain">
+                  도메인 삭제
+                </button>
+                <!-- Modal -->
+                <div class="modal fade" id="deleteDomain" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h1 class="h6 modal-title" id="exampleModalLabel">도메인 삭제</h1>
+                        <button type="button" class="btn-close" data-mdb-dismiss="modal" aria-label="Close"></button>
+                      </div>
+                      <div class="modal-body"><small>정말 삭제 하시겠습니까?</small></div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary btn-sm" data-mdb-dismiss="modal"><small>닫기</small></button>
+                        <form id="deleteButton" method="post">
+                          {% csrf_token %}
+                          <button id="domain-delete" class="btn btn-primary btn-sm"><small>도메인 삭제</small></button>
+                          <script type="text/javascript">
+                              let send = document.getElementById('domain-delete');
+                              send.addEventListener("click", function (){
+                                  let form = document.getElementById("deleteButton");
+                                  form.action = selectedRow+"/delete/";
+                                  form.method = "POST";
+                                  form.submit();
+                              });
+                          </script>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-6 text-end">
+              <button id="domain-reload" class="btn btn-dark btn-sm"><i class="fa fa-sync"></i> 새로고침</button>
+              <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+              <script type="text/javascript">
+                  let httpRequest;
+                  document.getElementById('domain-reload').addEventListener("click", function(){
+                      {#jquery style #}
+                      {#$.ajax({#}
+                      {#    type: "GET",#}
+                      {#    url: "{% url 'domain-sync' %}",#}
+                      {#    dataType: "json",#}
+                      {#    //data: {'csrfmiddlewaretoken': '{{ csrf_token }}'},#}
+                      {#    success: function(response){#}
+                      {#        console.log(response)#}
+                      {#        const datatableInstance = mdb.Datatable.getInstance(document.getElementById('datatable'));#}
+                      {#        datatableInstance.update(#}
+                      {#            {#}
+                      {#                columns: tableHeader,#}
+                      {#                rows: response,#}
+                      {#            }#}
+                      {#        )#}
+                      {#    },#}
+                      {#    error: function(request, status, error){#}
+                      {#        console.log(request, status, error)#}
+                      {#    }#}
+                      {#})#}
+                      {# pure javascript #}
+                      httpRequest = new XMLHttpRequest();
+                      httpRequest.onreadystatechange = function(){
+                          if(httpRequest.readyState === XMLHttpRequest.DONE){
+                              if(httpRequest.status === 200 ){
+                                  console.log(httpRequest.response)
+                                  const datatableInstance = mdb.Datatable.getInstance(document.getElementById('datatable'));
+                                  datatableInstance.update(
+                                      {
+                                          columns: tableHeader,
+                                          rows: httpRequest.response,
+                                      }
+                                  )
+                              }else {
+                                  console.log(httpRequest.request.status, httpRequest.request.error())
+                              }
+                          }
+                      }
+                      httpRequest.open('GET', '{% url "domain-sync" %}');
+                      httpRequest.responseType = "json";
+                      httpRequest.send();
+
+                      {#POST method#}
+                      {#let reqJson = new Object();#}
+                      {#httpRequest.open('POST', '{% url "domain-sync" %}', true);#}
+                      {#httpRequest.setRequestHeader('Content-Type', 'application/json');#}
+                      {#httpRequest.send(JSON.stringify(reqJson));#}
+                })
+              </script>
+            </div>
+          </div>
+        </div>
+
+      </div>
+      <div class="card">
+        <div class="input-group mb-4">
+          <input type="text" class="form-control" id="datatable-search-input" />
+          <button class="btn btn-primary" id="datatable-serarch-input" type="button">
+            <i class="fa fa-search"></i>
+          </button>
+        </div>
+        <div id="datatable">
+        </div>
+      </div>
+    </section>
+  </div>
+{% endblock page %}
+
+{% block local_js %}
+  <script type="text/javascript">
+      const tableHeader = [
+          { label: 'ID', field: 'id', sort: true },
+          { label: '도메인명', field: 'domain_name', sort: true },
+          { label: '도메인코드', field: 'domain_code', sort: false },
+          { label: 'OCR유형', field: 'ocr_type', sort: false },
+          { label: '서비스플랜', field: 'price_plan', sort: false },
+          { label: '생성일시', field: 'domain_created', sort: false },
+          { label: '변경일시', field: 'domain_updated', sort: false },
+      ]
+
+      $.ajax({
+          type: "GET",
+          url: "{% url 'domain-sync' %}",
+          dataType: "json",
+          //data: {'csrfmiddlewaretoken': '{{ csrf_token }}'},
+          success: function(response){
+              console.log(response)
+              // Datatable
+              const advancedData = {
+                  columns: tableHeader,
+                  //rows: {{ domains|safe }},
+                  rows: response
+              };
+              const options = {fullPagination: true, hover: true, selectable: true, sm: true}
+              const searchInput = new mdb.Datatable(document.getElementById('datatable'), advancedData, options)
+              let selectedRow = -1
+          },
+          error: function(request, status, error){
+              console.log(request, status, error)
+          }
+      })
+
+      document.getElementById('datatable').addEventListener('selectRows.mdb.datatable', (e) => {
+          console.log(e.selectedRows, e.selectedIndexes);
+          //console.log(e.selectedRows);
+          if(e.selectedRows.length > 0){
+              document.getElementById('domain-delete').classList.remove("disabled")
+              selectedRow = e.selectedRows[0].id
+          } else{
+              document.getElementById('domain-delete').classList.add("disabled")
+              selectedRow = -1
+          }
+      });
+
+      document.getElementById('datatable-search-input').addEventListener('input', (e) => {
+          searchInput.search(e.target.value);
+      });
+  </script>
+{% endblock local_js %}
